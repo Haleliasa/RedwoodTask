@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Zombies {
     public class ZombieArmy : MonoBehaviour {
+        [Header(EditorHeaders.References)]
         [SerializeField]
         private ZombieType[] types = null!;
 
@@ -17,6 +18,7 @@ namespace Zombies {
         [SerializeField]
         private Zombie zombiePrefab = null!;
 
+        [Header(EditorHeaders.Properties)]
         [Tooltip("sec")]
         [Min(0f)]
         [SerializeField]

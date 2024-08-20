@@ -5,9 +5,10 @@ using UnityEngine;
 
 namespace Zombies {
     public class ZombieStats : MonoBehaviour, IHittable {
-        private int resources;
+        [SerializeField]
+        private float maxHealth = 100f;
 
-        public float MaxHealth { get; private set; }
+        public float MaxHealth => this.maxHealth;
 
         public float Health { get; private set; }
 
@@ -15,9 +16,8 @@ namespace Zombies {
 
         public event Action? Died;
 
-        public void Init(float maxHealth, int resources) {
-            Health = MaxHealth = maxHealth;
-            this.resources = resources;
+        public void Init(float maxHealth) {
+            Health = this.maxHealth = maxHealth;
         }
 
         public void Hit(float damage) {
@@ -25,8 +25,12 @@ namespace Zombies {
             Health -= damage;
             TookDamage?.Invoke(damage);
             if (Mathf.Approximately(Health, 0f)) {
-                Died?.Invoke();
+                Die();
             }
+        }
+
+        private void Die() {
+            Died?.Invoke();
         }
     }
 }

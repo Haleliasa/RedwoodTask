@@ -1,5 +1,6 @@
 #nullable enable
 
+using Collectables;
 using System;
 using UnityEngine;
 
@@ -14,6 +15,19 @@ namespace Zombies {
         [SerializeField]
         private ZombieView view = null!;
 
+        [SerializeField]
+        private Collectable resourcePrefab = null!;
+
+        [SerializeField]
+        private Transform? resourcePosition;
+
+        private ZombieType? type;
+
+        private Vector2 ResourcePos =>
+            this.resourcePosition != null
+            ? this.resourcePosition.position
+            : transform.position;
+
         public event Action<Zombie>? Died;
 
         private void OnEnable() {
@@ -27,9 +41,8 @@ namespace Zombies {
         }
 
         public void Init(ZombieType type, Vector2 position, Transform target) {
-            this.stats.Init(
-                type.Health,
-                UnityEngine.Random.Range(type.MinResources, type.MaxResources + 1));
+            this.type = type;
+            this.stats.Init(type.Health);
             this.movement.Init(position, target, type.Speed);
             this.view.Init(type.ViewType);
         }
@@ -48,6 +61,13 @@ namespace Zombies {
         }
 
         private void OnDied() {
+            int resources =
+                this.type != null
+                ? UnityEngine.Random.Range(this.type.MinResources, this.type.MaxResources + 1)
+                : 0;
+            if (resources > 0) {
+                Collectable.Place(this.resourcePrefab, ResourcePos, value: resources);
+            }
             Died?.Invoke(this);
         }
     }

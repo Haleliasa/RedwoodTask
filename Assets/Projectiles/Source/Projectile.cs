@@ -1,46 +1,62 @@
 #nullable enable
 
+using System;
 using UnityEngine;
 
 namespace Projectiles {
     public class Projectile : MovingObject {
         [Header(nameof(Projectile))]
         [SerializeField]
-        private float distance = 20f;
+        private ProjectileProperties properties;
 
-        [SerializeField]
-        private float duration = 1f;
-
-        [SerializeField]
-        private float damage = 10f;
-
+        private ProjectileProperties props;
+        private IDisposable? pooled;
         private Vector2 dir;
         private float speed;
         private float? timeLeft;
 
-        public static Projectile Launch(Projectile prefab, Vector2 from, float angleDeg) {
-            Projectile projectile = Instantiate(prefab);
-            projectile.Launch(from, angleDeg);
+        public ProjectileProperties Properties => this.properties;
+
+        public static T Launch<T>(
+            T prefab,
+            Vector2 from,
+            float angleDeg,
+            ProjectileProperties? properties = null)
+            where T : Projectile {
+            T projectile = Instantiate(prefab);
+            projectile.Launch(from, angleDeg, properties);
             return projectile;
         }
 
-        public static Projectile Launch(IObjectPool<Projectile> pool, Vector2 from, float angleDeg) {
-            Projectile projectile = pool.Get();
-            projectile.Launch(from, angleDeg);
+        public static T Launch<T>(
+            IObjectPool<T> pool,
+            Vector2 from,
+            float angleDeg,
+            ProjectileProperties? properties = null)
+            where T : Projectile {
+            IDisposableObject<T> pooled = pool.GetDisposable();
+            T projectile = pooled.Object;
+            projectile.pooled = pooled;
+            projectile.Launch(from, angleDeg, properties);
             return projectile;
         }
 
-        public void Launch(Vector2 from, float angleDeg) {
-            if (Mathf.Approximately(this.distance, 0f)
-                || Mathf.Approximately(this.duration, 0f)) {
+        public void Launch(
+            Vector2 from,
+            float angleDeg,
+            ProjectileProperties? properties = null) {
+            this.props = properties ?? this.properties;
+
+            if (Mathf.Approximately(this.props.Distance, 0f)
+                || Mathf.Approximately(this.props.Duration, 0f)) {
                 Destroy(gameObject);
                 return;
             }
 
             transform.SetPositionAndRotation(from, Quaternion.Euler(0f, 0f, angleDeg));
             this.dir = Vector2.right.Rotate(angleDeg);
-            this.speed = this.distance / this.duration;
-            this.timeLeft = this.duration;
+            this.speed = this.props.Distance / this.props.Duration;
+            this.timeLeft = this.props.Duration;
         }
 
         protected override void Update() {
@@ -61,20 +77,27 @@ namespace Projectiles {
             return this.dir * (this.speed * deltaTime);
         }
 
+        protected virtual void Hit(GameObject obj) {
+            if (obj.TryGetComponentInChildren(out IHittable? hittable)) {
+                hittable.Hit(this.props.Damage);
+            }
+            DestroySelf();
+        }
+
+        protected void DestroySelf() {
+            if (this.pooled != null) {
+                this.pooled.Dispose();
+            } else {
+                Destroy(gameObject);
+            }
+        }
+
         private void OnCollisionEnter2D(Collision2D collision) {
             Hit(collision.gameObject);
         }
 
         private void OnTriggerEnter2D(Collider2D collision) {
             Hit(collision.gameObject);
-        }
-
-        private void Hit(GameObject obj) {
-            if (obj.TryGetComponentInChildren(out IHittable? hittable))
-            {
-                hittable.Hit(this.damage);
-            }
-            Destroy(gameObject);
         }
     }
 }

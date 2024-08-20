@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 1194782396800869215}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -134,6 +134,7 @@ MonoBehaviour:
   animator: {fileID: 3499565302329349521}
   sprite: {fileID: 2336156965641241448}
   healthBar: {fileID: 4354797858773656206}
+  type: 0
 --- !u!95 &3499565302329349521
 Animator:
   serializedVersion: 5
@@ -181,7 +182,7 @@ Transform:
   m_GameObject: {fileID: 4343529264362940536}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 0.1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -252,7 +253,7 @@ GameObject:
   - component: {fileID: 6124387400709779574}
   - component: {fileID: 7230889654146922418}
   - component: {fileID: 1728000346781936334}
-  - component: {fileID: 598917694505928194}
+  - component: {fileID: 6483134334295515277}
   - component: {fileID: 3542497384721318387}
   m_Layer: 6
   m_Name: Zombie
@@ -275,6 +276,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3703795499190147482}
+  - {fileID: 3131209481378897243}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9037488634942526814
@@ -292,6 +294,8 @@ MonoBehaviour:
   stats: {fileID: 6124387400709779574}
   movement: {fileID: 7230889654146922418}
   view: {fileID: 6925816623372668467}
+  resourcePrefab: {fileID: 4419983554715470874, guid: db8552c789fbe83489ab3f85222ff414, type: 3}
+  resourcePosition: {fileID: 3131209481378897243}
 --- !u!114 &6124387400709779574
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -304,6 +308,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce95f0f539396594aa073ac0a8070647, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 100
 --- !u!114 &7230889654146922418
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -317,6 +322,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rigidbody: {fileID: 3542497384721318387}
+  target: {fileID: 0}
+  speed: 5
 --- !u!114 &1728000346781936334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,8 +336,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 879daf24b687001478ada7ec9a0c00c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!58 &598917694505928194
-CircleCollider2D:
+--- !u!70 &6483134334295515277
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -358,12 +365,12 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
+  m_Size: {x: 1, y: 2}
+  m_Direction: 0
 --- !u!50 &3542497384721318387
 Rigidbody2D:
   serializedVersion: 4
@@ -391,3 +398,34 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!1 &6304991996312429140
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3131209481378897243}
+  m_Layer: 0
+  m_Name: AmmoPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3131209481378897243
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6304991996312429140}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6729501767250143652}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

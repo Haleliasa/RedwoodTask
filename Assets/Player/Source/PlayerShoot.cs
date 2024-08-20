@@ -1,13 +1,13 @@
 #nullable enable
 
 using Projectiles;
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Player {
     public class PlayerShoot : MonoBehaviour {
+        [Header(EditorHeaders.References)]
         [SerializeField]
         private InputActionAsset inputActions = null!;
 
@@ -17,13 +17,25 @@ namespace Player {
         [SerializeField]
         private Projectile projectilePrefab = null!;
 
+        [Header(EditorHeaders.Properties)]
+        [Min(0)]
+        [SerializeField]
+        private int ammo = 100;
+
         [Tooltip("sec")]
         [Min(0f)]
         [SerializeField]
-        private float interval = 0.25f;
+        private float interval = 0.5f;
+
+        [SerializeField]
+        private bool overrideProjectileProperties = false;
+
+        [SerializeField]
+        private ProjectileProperties projectileProperties;
 
         private CharacterActions actions;
         private Coroutine? shootCoroutine;
+        private IShootTiming? timing;
         private float angle = 0f;
 
         private Vector2 ProjectilePos =>
@@ -31,18 +43,31 @@ namespace Player {
             ? this.projectilePosition.position
             : transform.position;
 
-        public event Action? Ready;
+        private ProjectileProperties? ProjectileProps =>
+            this.overrideProjectileProperties
+            ? this.projectileProperties
+            : null;
+
+        public void SetTiming(IShootTiming? timing) {
+            this.timing = timing;
+        }
 
         public void SetAngle(float angleDeg) {
             this.angle = angleDeg;
         }
 
-        public void Shoot() {
-            Projectile.Launch(this.projectilePrefab, ProjectilePos, this.angle);
+        public void AddAmmo(int amount) {
+            if (amount > 0) {
+                ChangeAmmo(amount);
+            }
         }
 
         private void Awake() {
             this.actions = new CharacterActions(this.inputActions);
+        }
+
+        private void Start() {
+            ChangeAmmo(0);
         }
 
         private void OnEnable() {
@@ -66,10 +91,31 @@ namespace Player {
 
         private IEnumerator ShootRoutine() {
             do {
-                Ready?.Invoke();
+                StartCoroutine(Shoot());
                 yield return new WaitForSeconds(this.interval);
             } while (this.actions.Shoot.IsInProgress());
             this.shootCoroutine = null;
+        }
+
+        private IEnumerator Shoot() {
+            if (this.ammo == 0)
+            {
+                yield break;
+            }
+            if (this.timing != null) {
+                yield return this.timing.BeforeShoot(this.interval);
+            }
+            Projectile.Launch(
+                this.projectilePrefab,
+                ProjectilePos,
+                this.angle,
+                properties: ProjectileProps);
+            ChangeAmmo(-1);
+        }
+
+        private void ChangeAmmo(int delta) {
+            this.ammo = Mathf.Max(this.ammo + delta, 0);
+            print($"ammo: {this.ammo}");
         }
     }
 }

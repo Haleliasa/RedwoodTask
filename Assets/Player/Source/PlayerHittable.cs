@@ -2,7 +2,7 @@
 
 namespace Player {
     public class PlayerHittable : MonoBehaviour, IHittable {
-        void IHittable.Hit(float damage) {
+        public void Hit(float damage) {
             print("player died");
         }
     }

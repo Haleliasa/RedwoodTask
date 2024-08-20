@@ -1,9 +1,11 @@
 ﻿#nullable enable
 
+using Collectables;
+using System.Collections;
 using UnityEngine;
 
 namespace Player {
-    public class PlayerCharacter : MonoBehaviour {
+    public class PlayerCharacter : MonoBehaviour, IShootTiming {
         [SerializeField]
         private PlayerMovement movement = null!;
 
@@ -11,16 +13,27 @@ namespace Player {
         private PlayerShoot shoot = null!;
 
         [SerializeField]
+        private PlayerCollector collector = null!;
+
+        [SerializeField]
         private PlayerView view = null!;
 
         private float moveAxisNonZero = 1f;
 
+        IEnumerator IShootTiming.BeforeShoot(float interval) {
+            yield return this.view.Shoot(interval);
+        }
+
+        private void Start() {
+            this.shoot.SetTiming(this);
+        }
+
         private void OnEnable() {
-            this.shoot.Ready += OnShootReady;
+            this.collector.Collecting += OnCollecting;
         }
 
         private void OnDisable() {
-            this.shoot.Ready -= OnShootReady;
+            this.collector.Collecting -= OnCollecting;
         }
 
         private void Update() {
@@ -28,13 +41,13 @@ namespace Player {
                 this.moveAxisNonZero = this.movement.Axis;
             }
             this.shoot.SetAngle(this.moveAxisNonZero > 0f ? 0f : 180f);
-            this.view.SetMoveAxis(this.moveAxisNonZero);
+            this.view.SetMoveAxis(this.movement.Axis);
         }
 
-        private void OnShootReady() {
-            // Shoot will be called on the view animator event
-            //this.view.TriggerShoot();
-            this.shoot.Shoot();
+        private void OnCollecting(ICollectable collectable) {
+            if (collectable.Type == CollectableTypes.AmmoPack) {
+                this.shoot.AddAmmo(collectable.Value);
+            }
         }
     }
 }

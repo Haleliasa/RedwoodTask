@@ -4,7 +4,13 @@ using UnityEngine;
 
 namespace Zombies {
     public class ZombieMovement : MovingObject {
+        [Header(nameof(ZombieMovement))]
+        [Header(EditorHeaders.References)]
+        [SerializeField]
         private Transform? target;
+
+        [Header(EditorHeaders.Properties)]
+        [SerializeField]
         private float speed = 0f;
 
         public float? Axis { get; private set; }
