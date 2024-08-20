@@ -4,7 +4,7 @@ using System.Collections;
 using UnityEngine;
 
 namespace Zombies {
-    public class ZombieArmy : MonoBehaviour {
+    public class ZombieArmy : MonoBehaviour, IInjectComponent {
         [Header(EditorHeaders.References)]
         [SerializeField]
         private ZombieType[] types = null!;
@@ -13,10 +13,7 @@ namespace Zombies {
         private Transform[] positions = null!;
 
         [SerializeField]
-        private Transform target = null!;
-
-        [SerializeField]
-        private Zombie zombiePrefab = null!;
+        private Transform? target;
 
         [Header(EditorHeaders.Properties)]
         [Tooltip("sec")]
@@ -29,9 +26,32 @@ namespace Zombies {
         [SerializeField]
         private float maxSpawnInterval = 10f;
 
+        private IObjectPool<Zombie> zombiePool = null!;
+        private Injector injector = null!;
         private Coroutine? spawnCoroutine;
 
+        [Inject]
+        public void Inject(
+            IObjectPool<Zombie> zombiePool,
+            Injector injector) {
+            this.zombiePool = zombiePool;
+            this.injector = injector;
+        }
+
+        public void Init(Transform target) {
+            this.target = target;
+            StartIfNotStarted();
+        }
+
         private void Start() {
+            StartIfNotStarted();
+        }
+
+        private void StartIfNotStarted() {
+            if (this.spawnCoroutine != null
+                || this.target == null) {
+                return;
+            }
             this.spawnCoroutine = StartCoroutine(SpawnZombies());
         }
 
@@ -40,12 +60,14 @@ namespace Zombies {
                 yield return new WaitForSeconds(
                     Random.Range(this.minSpawnInterval, this.maxSpawnInterval));
                 if (this.types.Length == 0
-                    || this.positions.Length == 0) {
+                    || this.positions.Length == 0
+                    || this.target == null) {
                     continue;
                 }
                 ZombieType type = this.types[Random.Range(0, this.types.Length)];
                 Vector2 pos = this.positions[Random.Range(0, this.positions.Length)].position;
-                Zombie zombie = Instantiate(this.zombiePrefab, transform);
+                Zombie zombie = this.zombiePool.Get();
+                this.injector.Inject(zombie.gameObject);
                 zombie.Init(type, pos, this.target);
                 zombie.Died += OnZombieDied;
                 print($"{type.name} spawned");
@@ -54,7 +76,7 @@ namespace Zombies {
 
         private void OnZombieDied(Zombie zombie) {
             zombie.Died -= OnZombieDied;
-            Destroy(zombie.gameObject);
+            this.zombiePool.Return(zombie);
         }
     }
 }

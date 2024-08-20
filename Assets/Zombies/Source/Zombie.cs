@@ -5,7 +5,7 @@ using System;
 using UnityEngine;
 
 namespace Zombies {
-    public class Zombie : MonoBehaviour {
+    public class Zombie : MonoBehaviour, IInjectComponent {
         [SerializeField]
         private ZombieStats stats = null!;
 
@@ -16,11 +16,9 @@ namespace Zombies {
         private ZombieView view = null!;
 
         [SerializeField]
-        private Collectable resourcePrefab = null!;
-
-        [SerializeField]
         private Transform? resourcePosition;
 
+        private IObjectPool<Collectable> resourcePool = null!;
         private ZombieType? type;
 
         private Vector2 ResourcePos =>
@@ -38,6 +36,13 @@ namespace Zombies {
         private void OnDisable() {
             this.stats.TookDamage -= OnTookDamage;
             this.stats.Died -= OnDied;
+        }
+
+        [Inject]
+        public void Inject(
+            // key in case of multiple pools of type Collectable
+            [InjectKey(InjectKeys.ZombieResourcePool)] IObjectPool<Collectable> resourcePool) {
+            this.resourcePool = resourcePool;
         }
 
         public void Init(ZombieType type, Vector2 position, Transform target) {
@@ -66,7 +71,7 @@ namespace Zombies {
                 ? UnityEngine.Random.Range(this.type.MinResources, this.type.MaxResources + 1)
                 : 0;
             if (resources > 0) {
-                Collectable.Place(this.resourcePrefab, ResourcePos, value: resources);
+                Collectable.Place(this.resourcePool, ResourcePos, value: resources);
             }
             Died?.Invoke(this);
         }

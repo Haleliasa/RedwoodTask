@@ -278,7 +278,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputActions: {fileID: -944628639613478452, guid: 6a740cf365d69ce42ab0bb99700ded84, type: 3}
   projectilePosition: {fileID: 8862236596626613428}
-  projectilePrefab: {fileID: 7804847683837512064, guid: dc20ab924a38884468f4978dd6ee545b, type: 3}
   ammo: 100
   interval: 0.25
   overrideProjectileProperties: 1

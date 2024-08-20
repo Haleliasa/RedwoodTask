@@ -6,16 +6,13 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Player {
-    public class PlayerShoot : MonoBehaviour {
+    public class PlayerShoot : MonoBehaviour, IInjectComponent {
         [Header(EditorHeaders.References)]
         [SerializeField]
         private InputActionAsset inputActions = null!;
 
         [SerializeField]
         private Transform? projectilePosition;
-
-        [SerializeField]
-        private Projectile projectilePrefab = null!;
 
         [Header(EditorHeaders.Properties)]
         [Min(0)]
@@ -34,6 +31,7 @@ namespace Player {
         private ProjectileProperties projectileProperties;
 
         private CharacterActions actions;
+        private IObjectPool<Projectile> projectilePool = null!;
         private Coroutine? shootCoroutine;
         private IShootTiming? timing;
         private float angle = 0f;
@@ -47,6 +45,13 @@ namespace Player {
             this.overrideProjectileProperties
             ? this.projectileProperties
             : null;
+
+        [Inject]
+        public void Inject(
+            // key in case of multiple pools of type Projectile
+            [InjectKey(InjectKeys.PlayerProjectilePool)] IObjectPool<Projectile> projectilePool) {
+            this.projectilePool = projectilePool;
+        }
 
         public void SetTiming(IShootTiming? timing) {
             this.timing = timing;
@@ -106,7 +111,7 @@ namespace Player {
                 yield return this.timing.BeforeShoot(this.interval);
             }
             Projectile.Launch(
-                this.projectilePrefab,
+                this.projectilePool,
                 ProjectilePos,
                 this.angle,
                 properties: ProjectileProps);

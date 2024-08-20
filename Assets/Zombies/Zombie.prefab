@@ -294,7 +294,6 @@ MonoBehaviour:
   stats: {fileID: 6124387400709779574}
   movement: {fileID: 7230889654146922418}
   view: {fileID: 6925816623372668467}
-  resourcePrefab: {fileID: 4419983554715470874, guid: db8552c789fbe83489ab3f85222ff414, type: 3}
   resourcePosition: {fileID: 3131209481378897243}
 --- !u!114 &6124387400709779574
 MonoBehaviour:

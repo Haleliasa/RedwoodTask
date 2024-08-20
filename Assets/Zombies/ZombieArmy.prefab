@@ -87,7 +87,6 @@ MonoBehaviour:
   - {fileID: 588937682471310017}
   - {fileID: 7717980239684901683}
   target: {fileID: 0}
-  zombiePrefab: {fileID: 9037488634942526814, guid: 504d4f9b632747d49ae2e15acce41a9c, type: 3}
   minSpawnInterval: 1
   maxSpawnInterval: 5
 --- !u!1 &9221036735936384942

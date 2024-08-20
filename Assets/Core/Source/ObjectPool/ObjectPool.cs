@@ -15,16 +15,17 @@ public abstract class ObjectPool<T> : MonoBehaviour, IObjectPool<T> where T : Ob
 
     private void Start() {
         for (int i = 0; i < this.startSize; i++) {
-            this.pool.Push(Instantiate(this.prefab, transform));
+            T obj = Instantiate(this.prefab, transform);
+            Return(obj);
         }
     }
 
     public T Get() {
-        if (this.pool.TryPop(out T obj)) {
-            ToggleObject(obj, true);
-            return obj;
+        if (!this.pool.TryPop(out T obj)) {
+            return Instantiate(this.prefab, transform);
         }
-        return Instantiate(this.prefab, transform);
+        ToggleObject(obj, true);
+        return obj;
     }
 
     public IDisposableObject<T> GetDisposable() {
