@@ -70,7 +70,6 @@ namespace Zombies {
                 this.injector.Inject(zombie.gameObject);
                 zombie.Init(type, pos, this.target);
                 zombie.Died += OnZombieDied;
-                print($"{type.name} spawned");
             }
         }
 

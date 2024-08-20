@@ -10,7 +10,7 @@ public class MovingObject : MonoBehaviour {
     public SimulationMode2D SimulationMode => Physics2D.simulationMode;
 
     public void Teleport(Vector2 position) {
-        // TODO: add rigidbody teleportation
+        // should use rigidbody teleportation
         transform.position = position;
     }
     

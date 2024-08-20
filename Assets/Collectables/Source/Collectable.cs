@@ -9,7 +9,7 @@ namespace Collectables {
         [SerializeField]
         private CollectableView? view;
 
-        // TODO: add KeyList asset class and SelectFrom attribute
+        // should use some kind of KeyList asset and SelectFrom attribute
         [Header(EditorHeaders.Properties)]
         [SerializeField]
         protected string type = null!;

@@ -2,8 +2,11 @@
 
 namespace Player {
     public class PlayerHittable : MonoBehaviour, IHittable {
+        [SerializeField]
+        private SerializedEvent[] diedEvents;
+
         public void Hit(float damage) {
-            print("player died");
+            this.diedEvents.ForEach(e => e.Invoke(this));
         }
     }
 }

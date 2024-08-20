@@ -278,6 +278,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputActions: {fileID: -944628639613478452, guid: 6a740cf365d69ce42ab0bb99700ded84, type: 3}
   projectilePosition: {fileID: 8862236596626613428}
+  ammoChangedEvents:
+  - {fileID: 11400000, guid: 3bb348d7c20cf9f4997575688b7411f3, type: 2}
   ammo: 100
   interval: 0.25
   overrideProjectileProperties: 1
@@ -309,6 +311,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a15eb9bac9ae5a4f8d9197dcb90d6ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  diedEvents:
+  - {fileID: 11400000, guid: 58fa34d2ef821714d8ece1153517e310, type: 2}
 --- !u!70 &6523917882140852823
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

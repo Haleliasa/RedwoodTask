@@ -14,6 +14,9 @@ namespace Player {
         [SerializeField]
         private Transform? projectilePosition;
 
+        [SerializeField]
+        private SerializedEvent<int>[] ammoChangedEvents = null!;
+
         [Header(EditorHeaders.Properties)]
         [Min(0)]
         [SerializeField]
@@ -120,7 +123,7 @@ namespace Player {
 
         private void ChangeAmmo(int delta) {
             this.ammo = Mathf.Max(this.ammo + delta, 0);
-            print($"ammo: {this.ammo}");
+            this.ammoChangedEvents.ForEach(e => e.InvokeTyped(this, this.ammo));
         }
     }
 }
