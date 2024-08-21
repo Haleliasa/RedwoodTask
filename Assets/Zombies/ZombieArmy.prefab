@@ -87,6 +87,10 @@ MonoBehaviour:
   - {fileID: 588937682471310017}
   - {fileID: 7717980239684901683}
   target: {fileID: 0}
+  startOnEvents:
+  - {fileID: 11400000, guid: 812515c88e8b0424391e1e8be36dffe4, type: 2}
+  stopOnEvents:
+  - {fileID: 11400000, guid: 203b054ecacf4fc41a157e3ceec4d6f6, type: 2}
   minSpawnInterval: 1
   maxSpawnInterval: 5
 --- !u!1 &9221036735936384942

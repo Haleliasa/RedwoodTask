@@ -4,15 +4,33 @@ using UnityEngine;
 public class GameController : MonoBehaviour,
     ISerializedEventListener,
     ISerializedEventListener<int> {
+    [Header(EditorHeaders.Events)]
     [SerializeField]
-    private SerializedEvent[] gameOverOnEvents;
+    private SerializedEvent[] startedEvents;
 
     [SerializeField]
-    private SerializedEvent<int>[] gameOverAtZeroOnEvents;
+    private SerializedEvent[] stoppedEvents;
+
+    [Header(EditorHeaders.EventSubscriptions)]
+    [SerializeField]
+    private SerializedEvent[] stopOnEvents;
+
+    [SerializeField]
+    private SerializedEvent<int>[] stopAtZeroOnEvents;
+
+    [SerializeField]
+    private SerializedEvent[] restartOnEvents;
+
+    [SerializeField]
+    private SerializedEvent[] exitOnEvents;
 
     void ISerializedEventListener.OnSerializedEvent(SerializedEvent ev, Object source) {
-        if (this.gameOverOnEvents.Contains(ev)) {
-            Over();
+        if (this.stopOnEvents.Contains(ev)) {
+            StopGame();
+        } else if (this.restartOnEvents.Contains(ev)) {
+            StartGame();
+        } else if (this.exitOnEvents.Contains(ev)) {
+            Exit();
         }
     }
 
@@ -20,23 +38,39 @@ public class GameController : MonoBehaviour,
         SerializedEvent<int> ev,
         Object source,
         int payload) {
-        if (this.gameOverAtZeroOnEvents.Contains(ev)
+        if (this.stopAtZeroOnEvents.Contains(ev)
             && payload == 0) {
-            Over();
+            StopGame();
         }
     }
 
     private void OnEnable() {
-        this.gameOverOnEvents.ForEach(ev => ev.Subscribe(this));
-        this.gameOverAtZeroOnEvents.ForEach(ev => ev.SubscribeTyped(this));
+        this.stopOnEvents.ForEach(ev => ev.Subscribe(this));
+        this.stopAtZeroOnEvents.ForEach(ev => ev.SubscribeTyped(this));
+        this.restartOnEvents.ForEach(ev => ev.Subscribe(this));
+        this.exitOnEvents.ForEach(ev => ev.Subscribe(this));
+    }
+
+    private void Start() {
+        StartGame();
     }
 
     private void OnDisable() {
-        this.gameOverOnEvents.ForEach(ev => ev.Unsubscribe(this));
-        this.gameOverAtZeroOnEvents.ForEach(ev => ev.Unsubscribe(this));
+        this.stopOnEvents.ForEach(ev => ev.Unsubscribe(this));
+        this.stopAtZeroOnEvents.ForEach(ev => ev.Unsubscribe(this));
+        this.restartOnEvents.ForEach(ev => ev.Unsubscribe(this));
+        this.exitOnEvents.ForEach(ev => ev.Unsubscribe(this));
     }
 
-    private void Over() {
-        print("game over");
+    private void StartGame() {
+        this.startedEvents.ForEach(ev => ev.Invoke(this));
+    }
+
+    private void StopGame() {
+        this.stoppedEvents.ForEach(ev => ev.Invoke(this));
+    }
+
+    private void Exit() {
+        Application.Quit();
     }
 }

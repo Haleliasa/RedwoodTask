@@ -23,9 +23,7 @@ public sealed class Injector {
         Inject(this.gameObjects, deep: true);
 
         if (includeAssets) {
-            ScriptableObject[] assets = UnityEngine.Object.FindObjectsByType<ScriptableObject>(
-                FindObjectsInactive.Include,
-                FindObjectsSortMode.None);
+            ScriptableObject[] assets = Resources.FindObjectsOfTypeAll<ScriptableObject>();
             Inject(assets);
         }
     }

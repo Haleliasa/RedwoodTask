@@ -7,8 +7,6 @@ public class InputController : MonoBehaviour
     private InputActionAsset[] actionAssets;
 
     private void Start() {
-        foreach (InputActionAsset asset in this.actionAssets) {
-            asset.Enable();
-        }
+        this.actionAssets.ForEach(a => a.Enable());
     }
 }

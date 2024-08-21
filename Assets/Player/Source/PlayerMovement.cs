@@ -32,5 +32,9 @@ namespace Player {
         private void Awake() {
             this.actions = new CharacterActions(this.inputActions);
         }
+
+        private void OnDisable() {
+            Axis = 0f;
+        }
     }
 }

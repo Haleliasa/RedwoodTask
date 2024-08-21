@@ -14,13 +14,14 @@ namespace Player {
         [SerializeField]
         private Transform? projectilePosition;
 
+        [Header(EditorHeaders.Events)]
         [SerializeField]
         private SerializedEvent<int>[] ammoChangedEvents = null!;
 
         [Header(EditorHeaders.Properties)]
         [Min(0)]
         [SerializeField]
-        private int ammo = 100;
+        private int startAmmo = 100;
 
         [Tooltip("sec")]
         [Min(0f)]
@@ -35,6 +36,7 @@ namespace Player {
 
         private CharacterActions actions;
         private IObjectPool<Projectile> projectilePool = null!;
+        private int ammo;
         private Coroutine? shootCoroutine;
         private IShootTiming? timing;
         private float angle = 0f;
@@ -70,16 +72,20 @@ namespace Player {
             }
         }
 
+        public void ResetAmmo() {
+            SetAmmo(this.startAmmo);
+        }
+
         private void Awake() {
             this.actions = new CharacterActions(this.inputActions);
         }
 
-        private void Start() {
-            ChangeAmmo(0);
-        }
-
         private void OnEnable() {
             this.actions.Shoot.started += StartShooting;
+        }
+
+        private void Start() {
+            ResetAmmo();
         }
 
         private void OnDisable() {
@@ -122,7 +128,11 @@ namespace Player {
         }
 
         private void ChangeAmmo(int delta) {
-            this.ammo = Mathf.Max(this.ammo + delta, 0);
+            SetAmmo(this.ammo + delta);
+        }
+
+        private void SetAmmo(int amount) {
+            this.ammo = Mathf.Max(amount, 0);
             this.ammoChangedEvents.ForEach(e => e.InvokeTyped(this, this.ammo));
         }
     }

@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace Zombies {
     public class ZombieView : MonoBehaviour {
-        public const string TypeParameter = "Type";
-
         [Header(EditorHeaders.References)]
         [SerializeField]
         private Animator animator = null!;
@@ -27,20 +25,35 @@ namespace Zombies {
 
         public void Init(ZombieViewType type) {
             this.type = type;
-            this.animator.SetInteger(TypeParameter, (int)type);
+            this.animator.SetInteger(ZombieAnimatorParameters.Type, (int)type);
             SetHealth(1f);
         }
 
-        public void SetFlip(bool flip) {
+        public void SetMoveAxis(float axis) {
+            if (Mathf.Approximately(axis, 0f)) {
+                return;
+            }
+
+            bool flip = axis < 0f;
+
             if (flip == this.flip) {
                 return;
             }
+
             this.sprite.flipX ^= true;
             this.flip = flip;
         }
 
         public void SetHealth(float percent) {
             this.healthBar.size = this.healthBar.size.Set(x: HealthBarSize * percent);
+        }
+
+        private void OnEnable() {
+            this.animator.enabled = true;
+        }
+
+        private void OnDisable() {
+            this.animator.enabled = false;
         }
     }
 }

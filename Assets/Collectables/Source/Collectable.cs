@@ -1,13 +1,18 @@
 ﻿#nullable enable
 
 using System;
+using System.Linq;
 using UnityEngine;
 
 namespace Collectables {
-    public class Collectable : MonoBehaviour, ICollectable {
+    public class Collectable : MonoBehaviour, ICollectable, ISerializedEventListener {
         [Header(EditorHeaders.References)]
         [SerializeField]
         private CollectableView? view;
+
+        [Header(EditorHeaders.EventSubscriptions)]
+        [SerializeField]
+        private SerializedEvent[] destroyOnEvents = null!;
 
         // should use some kind of KeyList asset and SelectFrom attribute
         [Header(EditorHeaders.Properties)]
@@ -60,6 +65,24 @@ namespace Collectables {
             DestroySelf();
         }
 
+        public virtual void OnSerializedEvent(SerializedEvent ev, UnityEngine.Object source) {
+            if (this.destroyOnEvents.Contains(ev)) {
+                DestroySelf();
+            }
+        }
+
+        protected virtual void OnEnable() {
+            this.destroyOnEvents.ForEach(ev => ev.Subscribe(this));
+        }
+
+        protected virtual void Start() {
+            UpdateView();
+        }
+
+        protected virtual void OnDisable() {
+            this.destroyOnEvents.ForEach(ev => ev.Unsubscribe(this));
+        }
+
         protected void UpdateView() {
             if (this.view == null) {
                 return;
@@ -73,10 +96,6 @@ namespace Collectables {
             } else {
                 Destroy(gameObject);
             }
-        }
-
-        private void Start() {
-            UpdateView();
         }
     }
 }

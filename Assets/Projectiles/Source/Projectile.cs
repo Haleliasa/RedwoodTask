@@ -49,7 +49,7 @@ namespace Projectiles {
 
             if (Mathf.Approximately(this.props.Distance, 0f)
                 || Mathf.Approximately(this.props.Duration, 0f)) {
-                Destroy(gameObject);
+                DestroySelf();
                 return;
             }
 
@@ -63,8 +63,8 @@ namespace Projectiles {
             if (this.timeLeft.HasValue) {
                 this.timeLeft -= Time.deltaTime;
                 if (this.timeLeft <= 0f) {
-                    Destroy(gameObject);
                     this.timeLeft = null;
+                    DestroySelf();
                 }
             }
             base.Update();

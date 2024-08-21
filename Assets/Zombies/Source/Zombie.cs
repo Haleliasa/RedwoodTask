@@ -13,6 +13,9 @@ namespace Zombies {
         private ZombieMovement movement = null!;
 
         [SerializeField]
+        private ZombieAttack attack = null!;
+
+        [SerializeField]
         private ZombieView view = null!;
 
         [SerializeField]
@@ -28,16 +31,6 @@ namespace Zombies {
 
         public event Action<Zombie>? Died;
 
-        private void OnEnable() {
-            this.stats.TookDamage += OnTookDamage;
-            this.stats.Died += OnDied;
-        }
-
-        private void OnDisable() {
-            this.stats.TookDamage -= OnTookDamage;
-            this.stats.Died -= OnDied;
-        }
-
         [Inject]
         public void Inject(
             // key in case of multiple pools of type Collectable
@@ -46,16 +39,33 @@ namespace Zombies {
         }
 
         public void Init(ZombieType type, Vector2 position, Transform target) {
+            enabled = true;
             this.type = type;
             this.stats.Init(type.Health);
             this.movement.Init(position, target, type.Speed);
             this.view.Init(type.ViewType);
         }
 
+        private void OnEnable() {
+            ToggleParts(true);
+            this.stats.TookDamage += OnTookDamage;
+            this.stats.Died += OnDied;
+        }
+
         private void Update() {
-            if (this.movement.Axis.HasValue) {
-                this.view.SetFlip(this.movement.Axis.Value < 0f);
-            }
+            this.view.SetMoveAxis(this.movement.Axis);
+        }
+
+        private void OnDisable() {
+            ToggleParts(false);
+            this.stats.TookDamage -= OnTookDamage;
+            this.stats.Died -= OnDied;
+        }
+
+        private void ToggleParts(bool enable) {
+            this.movement.enabled = enable;
+            this.attack.enabled = enable;
+            this.view.enabled = enable;
         }
 
         private void OnTookDamage(float damage) {

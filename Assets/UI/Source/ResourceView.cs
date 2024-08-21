@@ -4,9 +4,11 @@ using UnityEngine;
 
 namespace UI {
     public class ResourceView : MonoBehaviour, ISerializedEventListener<int> {
+        [Header(EditorHeaders.References)]
         [SerializeField]
         private TMP_Text text;
 
+        [Header(EditorHeaders.EventSubscriptions)]
         [SerializeField]
         private SerializedEvent<int>[] updateOnEvents;
 

@@ -293,6 +293,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stats: {fileID: 6124387400709779574}
   movement: {fileID: 7230889654146922418}
+  attack: {fileID: 1728000346781936334}
   view: {fileID: 6925816623372668467}
   resourcePosition: {fileID: 3131209481378897243}
 --- !u!114 &6124387400709779574

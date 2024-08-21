@@ -41,13 +41,11 @@ namespace Player {
                 return;
             }
 
-            foreach (SpriteRenderer sprite in this.sprites) {
-                sprite.flipX ^= true;
-            }
-            foreach (Transform obj in this.flipPositions) {
+            this.sprites.ForEach(s => s.flipX ^= true);
+            this.flipPositions.ForEach(obj => {
                 Vector3 pos = obj.localPosition;
                 obj.localPosition = pos.Set(x: -pos.x);
-            }
+            });
             this.flip = flip;
         }
 

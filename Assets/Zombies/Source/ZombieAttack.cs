@@ -13,7 +13,8 @@ namespace Zombies {
         }
 
         private void Attack(GameObject target) {
-            if (!target.TryGetComponentInChildren(out IHittable hittable)) {
+            if (!enabled
+                || !target.TryGetComponentInChildren(out IHittable hittable)) {
                 return;
             }
             hittable.Hit(InstantKillDamage);

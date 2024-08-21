@@ -1,10 +1,12 @@
 #nullable enable
 
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Zombies {
-    public class ZombieArmy : MonoBehaviour, IInjectComponent {
+    public class ZombieArmy : MonoBehaviour, IInjectComponent, ISerializedEventListener {
         [Header(EditorHeaders.References)]
         [SerializeField]
         private ZombieType[] types = null!;
@@ -14,6 +16,13 @@ namespace Zombies {
 
         [SerializeField]
         private Transform? target;
+
+        [Header(EditorHeaders.EventSubscriptions)]
+        [SerializeField]
+        private SerializedEvent[] startOnEvents = null!;
+
+        [SerializeField]
+        private SerializedEvent[] stopOnEvents = null!;
 
         [Header(EditorHeaders.Properties)]
         [Tooltip("sec")]
@@ -28,7 +37,9 @@ namespace Zombies {
 
         private IObjectPool<Zombie> zombiePool = null!;
         private Injector injector = null!;
+        private bool started = false;
         private Coroutine? spawnCoroutine;
+        private readonly List<Zombie> zombies = new();
 
         [Inject]
         public void Inject(
@@ -40,19 +51,53 @@ namespace Zombies {
 
         public void Init(Transform target) {
             this.target = target;
-            StartIfNotStarted();
+            StartArmy(clearZombies: false);
         }
 
-        private void Start() {
-            StartIfNotStarted();
+        void ISerializedEventListener.OnSerializedEvent(SerializedEvent ev, Object source) {
+            if (this.startOnEvents.Contains(ev)) {
+                StartArmy(clearZombies: true);
+                this.started = true;
+            } else if (this.stopOnEvents.Contains(ev)) {
+                StopArmy();
+                this.started = false;
+            }
         }
 
-        private void StartIfNotStarted() {
+        private void OnEnable() {
+            if (this.started) {
+                StartArmy(clearZombies: false);
+            }
+            this.startOnEvents.ForEach(e => e.Subscribe(this));
+            this.stopOnEvents.ForEach(e => e.Subscribe(this));
+        }
+
+        private void OnDisable() {
+            StopArmy();
+            this.startOnEvents.ForEach(e => e.Unsubscribe(this));
+            this.stopOnEvents.ForEach(e => e.Unsubscribe(this));
+        }
+
+        private void StartArmy(bool clearZombies) {
+            if (clearZombies) {
+                this.zombies.ForEach(z => DestroyZombie(z, removeFromList: false));
+                this.zombies.Clear();
+            }
+
             if (this.spawnCoroutine != null
                 || this.target == null) {
                 return;
             }
+
             this.spawnCoroutine = StartCoroutine(SpawnZombies());
+        }
+
+        private void StopArmy() {
+            if (this.spawnCoroutine != null) {
+                StopCoroutine(this.spawnCoroutine);
+                this.spawnCoroutine = null;
+            }
+            this.zombies.NotNull().ForEach(z => z.enabled = false);
         }
 
         private IEnumerator SpawnZombies() {
@@ -70,10 +115,18 @@ namespace Zombies {
                 this.injector.Inject(zombie.gameObject);
                 zombie.Init(type, pos, this.target);
                 zombie.Died += OnZombieDied;
+                this.zombies.Add(zombie);
             }
         }
 
         private void OnZombieDied(Zombie zombie) {
+            DestroyZombie(zombie, removeFromList: true);
+        }
+
+        private void DestroyZombie(Zombie zombie, bool removeFromList) {
+            if (removeFromList) {
+                this.zombies.Remove(zombie);
+            }
             zombie.Died -= OnZombieDied;
             this.zombiePool.Return(zombie);
         }

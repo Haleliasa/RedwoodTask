@@ -102,7 +102,7 @@ Transform:
   m_GameObject: {fileID: 1306564444525230672}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.25, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -136,7 +136,7 @@ Transform:
   m_GameObject: {fileID: 3300497235072082320}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.25, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -249,6 +249,10 @@ MonoBehaviour:
   shoot: {fileID: 3222383668238263127}
   collector: {fileID: 5489287237047267563}
   view: {fileID: 205474107658697236}
+  startOnEvents:
+  - {fileID: 11400000, guid: 812515c88e8b0424391e1e8be36dffe4, type: 2}
+  stopOnEvents:
+  - {fileID: 11400000, guid: 203b054ecacf4fc41a157e3ceec4d6f6, type: 2}
 --- !u!114 &1914167482703061864
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -280,13 +284,13 @@ MonoBehaviour:
   projectilePosition: {fileID: 8862236596626613428}
   ammoChangedEvents:
   - {fileID: 11400000, guid: 3bb348d7c20cf9f4997575688b7411f3, type: 2}
-  ammo: 100
+  startAmmo: 100
   interval: 0.25
   overrideProjectileProperties: 1
   projectileProperties:
     distance: 20
     duration: 1
-    damage: 20
+    damage: 200
 --- !u!114 &5489287237047267563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -432,7 +436,7 @@ Transform:
   m_GameObject: {fileID: 8735736169439663505}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.25, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
