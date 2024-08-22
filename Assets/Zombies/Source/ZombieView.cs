@@ -12,16 +12,13 @@ namespace Zombies {
         private SpriteRenderer sprite = null!;
 
         [SerializeField]
-        private SpriteRenderer healthBar = null!;
+        private ProgressBar healthBar = null!;
 
         [Header(EditorHeaders.Properties)]
         [SerializeField]
         private ZombieViewType type = ZombieViewType.Regular;
 
-        private float? healthBarSize;
         private bool flip = false;
-
-        private float HealthBarSize => this.healthBarSize ??= this.healthBar.size.x;
 
         public void Init(ZombieViewType type) {
             this.type = type;
@@ -45,7 +42,7 @@ namespace Zombies {
         }
 
         public void SetHealth(float percent) {
-            this.healthBar.size = this.healthBar.size.Set(x: HealthBarSize * percent);
+            this.healthBar.SetProgress(percent);
         }
 
         private void OnEnable() {

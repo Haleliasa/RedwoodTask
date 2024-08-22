@@ -26,7 +26,9 @@ namespace UI {
         }
 
         public void Exit() {
-            Hide();
+            if (!Application.isEditor) {
+                Hide();
+            }
             this.exitEvents.ForEach(e => e.Invoke(this));
         }
 
