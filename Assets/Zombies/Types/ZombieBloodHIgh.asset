@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   viewType: 3
   health: 160
-  speed: 5
-  minResources: 4
-  maxResources: 5
+  speed: 2
+  minResources: 6
+  maxResources: 10

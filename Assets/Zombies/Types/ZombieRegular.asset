@@ -16,4 +16,4 @@ MonoBehaviour:
   health: 100
   speed: 5
   minResources: 1
-  maxResources: 2
+  maxResources: 10

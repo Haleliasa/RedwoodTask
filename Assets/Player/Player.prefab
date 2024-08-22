@@ -180,8 +180,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1910293375
+  m_SortingLayer: 2
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: fcb048a4ec94b9244827775a10073391, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -290,7 +290,7 @@ MonoBehaviour:
   projectileProperties:
     distance: 20
     duration: 1
-    damage: 200
+    damage: 20
 --- !u!114 &5489287237047267563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -350,7 +350,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 1.5, y: 3}
   m_Direction: 0
 --- !u!50 &4409986003847908298
 Rigidbody2D:
@@ -480,8 +480,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1910293375
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: ebe750a8b4fb27a47a637176f6527303, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

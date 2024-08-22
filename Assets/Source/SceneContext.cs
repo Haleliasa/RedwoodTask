@@ -7,6 +7,9 @@ using Zombies;
 
 public class SceneContext : MonoBehaviour {
     [SerializeField]
+    private new Camera camera;
+
+    [SerializeField]
     private ObjectPool<Zombie> zombiePool;
 
     [SerializeField]
@@ -22,6 +25,7 @@ public class SceneContext : MonoBehaviour {
 
     private void Awake() {
         IServiceCollection collection = new ServiceCollection()
+            .AddSingleton(this.camera)
             .AddSingleton<IObjectPool<Zombie>>(this.zombiePool)
             .AddKeyedSingleton<IObjectPool<Collectable>>(
                 InjectKeys.ZombieResourcePool,

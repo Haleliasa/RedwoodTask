@@ -1,0 +1,4 @@
+better health bar;
+try shoot animation event projectile launching;
+covariant object pool interface;
+sounds;

@@ -15,7 +15,7 @@ namespace Zombies {
         private Transform[] positions = null!;
 
         [SerializeField]
-        private Transform? target;
+        private Transform target = null!;
 
         [Header(EditorHeaders.EventSubscriptions)]
         [SerializeField]
@@ -79,13 +79,16 @@ namespace Zombies {
         }
 
         private void StartArmy(bool clearZombies) {
+            if (!enabled) {
+                return;
+            }
+
             if (clearZombies) {
                 this.zombies.ForEach(z => DestroyZombie(z, removeFromList: false));
                 this.zombies.Clear();
             }
 
-            if (this.spawnCoroutine != null
-                || this.target == null) {
+            if (this.spawnCoroutine != null) {
                 return;
             }
 
@@ -105,8 +108,7 @@ namespace Zombies {
                 yield return new WaitForSeconds(
                     Random.Range(this.minSpawnInterval, this.maxSpawnInterval));
                 if (this.types.Length == 0
-                    || this.positions.Length == 0
-                    || this.target == null) {
+                    || this.positions.Length == 0) {
                     continue;
                 }
                 ZombieType type = this.types[Random.Range(0, this.types.Length)];

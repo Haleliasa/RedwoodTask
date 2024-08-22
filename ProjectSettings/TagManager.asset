@@ -38,6 +38,24 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Back
+    uniqueID: 581492551
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: PlayerProjectile
+    uniqueID: 615825729
+    locked: 0
+  - name: Player
+    uniqueID: 2384673921
+    locked: 0
+  - name: Zombie
+    uniqueID: 1973499513
+    locked: 0
+  - name: AmmoPack
+    uniqueID: 420285877
+    locked: 0
+  - name: Front
+    uniqueID: 1084618855
     locked: 0

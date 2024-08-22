@@ -15,5 +15,5 @@ MonoBehaviour:
   viewType: 4
   health: 80
   speed: 10
-  minResources: 2
+  minResources: 4
   maxResources: 5
