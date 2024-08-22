@@ -34,7 +34,7 @@ namespace Zombies {
         [Inject]
         public void Inject(
             // key in case of multiple pools of type Collectable
-            [InjectKey(InjectKeys.ZombieResourcePool)] IObjectPool<Collectable> resourcePool) {
+            [ZombieResourcePool] IObjectPool<Collectable> resourcePool) {
             this.resourcePool = resourcePool;
         }
 

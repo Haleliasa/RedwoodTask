@@ -244,6 +244,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1239212519 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9198600293170449145, guid: 311f8e1c08d77714c86b4c1b3be262c7, type: 3}
+  m_PrefabInstance: {fileID: 5956010314980472417}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48e0892a749fc714d81b904439b547ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1804545356
 GameObject:
   m_ObjectHideFlags: 0
@@ -292,6 +303,7 @@ MonoBehaviour:
   camera: {fileID: 786343755267617364}
   zombiePool: {fileID: 620051893}
   zombieResourcePool: {fileID: 299065475}
+  zombieDeathSoundPool: {fileID: 1239212519}
   playerProjectilePool: {fileID: 4759824910221872939}
   zombieArmy: {fileID: 786343755267617363}
 --- !u!114 &1804545359
@@ -889,6 +901,63 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6097940175884411160, guid: cb0477c081f03a34b8d001a181fd9e88, type: 3}
   m_PrefabInstance: {fileID: 5510268327149384390}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &5956010314980472417
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2697075601685122826, guid: 311f8e1c08d77714c86b4c1b3be262c7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2697075601685122826, guid: 311f8e1c08d77714c86b4c1b3be262c7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2697075601685122826, guid: 311f8e1c08d77714c86b4c1b3be262c7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2697075601685122826, guid: 311f8e1c08d77714c86b4c1b3be262c7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2697075601685122826, guid: 311f8e1c08d77714c86b4c1b3be262c7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2697075601685122826, guid: 311f8e1c08d77714c86b4c1b3be262c7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2697075601685122826, guid: 311f8e1c08d77714c86b4c1b3be262c7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2697075601685122826, guid: 311f8e1c08d77714c86b4c1b3be262c7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2697075601685122826, guid: 311f8e1c08d77714c86b4c1b3be262c7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2697075601685122826, guid: 311f8e1c08d77714c86b4c1b3be262c7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3355315086642763863, guid: 311f8e1c08d77714c86b4c1b3be262c7, type: 3}
+      propertyPath: m_Name
+      value: ZombieDeathSoundPool
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 311f8e1c08d77714c86b4c1b3be262c7, type: 3}
 --- !u!1001 &7264970406285239038
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -958,6 +1027,7 @@ SceneRoots:
   - {fileID: 27904906977160024}
   - {fileID: 7264970406285239038}
   - {fileID: 1780292719275805222}
+  - {fileID: 5956010314980472417}
   - {fileID: 4759824910221872938}
   - {fileID: 1498332957015655715}
   - {fileID: 995556504}

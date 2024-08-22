@@ -1,8 +1,8 @@
 ﻿
 using System;
 
-[AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
-public sealed class InjectKeyAttribute : Attribute {
+[AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = true)]
+public class InjectKeyAttribute : Attribute {
     public InjectKeyAttribute(string key) {
         Key = key;
     }

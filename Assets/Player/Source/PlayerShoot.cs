@@ -3,6 +3,7 @@
 using Projectiles;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace Player {
@@ -17,6 +18,12 @@ namespace Player {
         [Header(EditorHeaders.Events)]
         [SerializeField]
         private SerializedEvent<int>[] ammoChangedEvents = null!;
+
+        [SerializeField]
+        private UnityEvent shot = null!;
+
+        [SerializeField]
+        private UnityEvent gotAmmo = null!;
 
         [Header(EditorHeaders.Properties)]
         [Min(0)]
@@ -54,7 +61,7 @@ namespace Player {
         [Inject]
         public void Inject(
             // key in case of multiple pools of type Projectile
-            [InjectKey(InjectKeys.PlayerProjectilePool)] IObjectPool<Projectile> projectilePool) {
+            [PlayerProjectilePool] IObjectPool<Projectile> projectilePool) {
             this.projectilePool = projectilePool;
         }
 
@@ -69,6 +76,7 @@ namespace Player {
         public void AddAmmo(int amount) {
             if (amount > 0) {
                 ChangeAmmo(amount);
+                this.gotAmmo.Invoke();
             }
         }
 
@@ -125,6 +133,7 @@ namespace Player {
                 this.angle,
                 properties: ProjectileProps);
             ChangeAmmo(-1);
+            this.shot.Invoke();
         }
 
         private void ChangeAmmo(int delta) {

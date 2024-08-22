@@ -16,6 +16,9 @@ public class SceneContext : MonoBehaviour {
     private ObjectPool<Collectable> zombieResourcePool;
 
     [SerializeField]
+    private ObjectPool<AudioSourceGroup> zombieDeathSoundPool;
+
+    [SerializeField]
     private ObjectPool<Projectile> playerProjectilePool;
 
     [SerializeField]
@@ -30,6 +33,9 @@ public class SceneContext : MonoBehaviour {
             .AddKeyedSingleton<IObjectPool<Collectable>>(
                 InjectKeys.ZombieResourcePool,
                 this.zombieResourcePool)
+            .AddKeyedSingleton<IObjectPool<AudioSourceGroup>>(
+                InjectKeys.ZombieDeathSoundPool,
+                this.zombieDeathSoundPool)
             .AddKeyedSingleton<IObjectPool<Projectile>>(
                 InjectKeys.PlayerProjectilePool,
                 this.playerProjectilePool)

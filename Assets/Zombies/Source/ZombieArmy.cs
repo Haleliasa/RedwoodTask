@@ -36,6 +36,7 @@ namespace Zombies {
         private float maxSpawnInterval = 10f;
 
         private IObjectPool<Zombie> zombiePool = null!;
+        private IObjectPool<AudioSourceGroup> zombieDeathSoundPool = null!;
         private Injector injector = null!;
         private bool started = false;
         private Coroutine? spawnCoroutine;
@@ -44,8 +45,11 @@ namespace Zombies {
         [Inject]
         public void Inject(
             IObjectPool<Zombie> zombiePool,
+            // key in case of multiple pools of type AudioSourceGroup
+            [ZombieDeathSoundPool] IObjectPool<AudioSourceGroup> zombieDeathSoundPool,
             Injector injector) {
             this.zombiePool = zombiePool;
+            this.zombieDeathSoundPool = zombieDeathSoundPool;
             this.injector = injector;
         }
 
@@ -123,6 +127,7 @@ namespace Zombies {
 
         private void OnZombieDied(Zombie zombie) {
             DestroyZombie(zombie, removeFromList: true);
+            StartCoroutine(PlayDeathSound());
         }
 
         private void DestroyZombie(Zombie zombie, bool removeFromList) {
@@ -131,6 +136,12 @@ namespace Zombies {
             }
             zombie.Died -= OnZombieDied;
             this.zombiePool.Return(zombie);
+        }
+
+        private IEnumerator PlayDeathSound() {
+            AudioSourceGroup deathSound = this.zombieDeathSoundPool.Get();
+            yield return deathSound.PlayOneRandomlyRoutine();
+            this.zombieDeathSoundPool.Return(deathSound);
         }
     }
 }

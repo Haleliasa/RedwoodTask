@@ -1,7 +1,11 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Zombies {
     public class ZombieAttack : MonoBehaviour {
+        [SerializeField]
+        private UnityEvent attacked;
+
         private const float InstantKillDamage = 9999f;
 
         private void OnCollisionEnter2D(Collision2D collision) {
@@ -18,6 +22,7 @@ namespace Zombies {
                 return;
             }
             hittable.Hit(InstantKillDamage);
+            this.attacked.Invoke();
         }
     }
 }
