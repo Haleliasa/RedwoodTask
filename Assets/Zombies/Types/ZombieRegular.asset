@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ZombieRegular
   m_EditorClassIdentifier: 
   viewType: 0
-  health: 100
+  health: 80
   speed: 5
   minResources: 1
   maxResources: 10

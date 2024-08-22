@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ZombieBloodHIgh
   m_EditorClassIdentifier: 
   viewType: 3
-  health: 160
+  health: 140
   speed: 2
   minResources: 6
   maxResources: 10
