@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ObjectPool<T> : MonoBehaviour, IObjectPool<T> where T : Object {
+public abstract class ObjectPool<T> : MonoBehaviour, IConcreteObjectPool<T> where T : Object {
     [Header(EditorHeaders.References)]
     [SerializeField]
     private T prefab;
@@ -20,17 +20,17 @@ public abstract class ObjectPool<T> : MonoBehaviour, IObjectPool<T> where T : Ob
         }
     }
 
-    public T Get() {
+    public IDisposableObject<T> Get() {
+        T obj = GetConcrete();
+        return new Disposable(obj, this);
+    }
+
+    public T GetConcrete() {
         if (!this.pool.TryPop(out T obj)) {
             return Instantiate(this.prefab, transform);
         }
         ToggleObject(obj, true);
         return obj;
-    }
-
-    public IDisposableObject<T> GetDisposable() {
-        T obj = Get();
-        return new Disposable(obj, this);
     }
 
     public void Return(T obj) {

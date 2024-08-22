@@ -34,7 +34,7 @@ namespace Projectiles {
             float angleDeg,
             ProjectileProperties? properties = null)
             where T : Projectile {
-            IDisposableObject<T> pooled = pool.GetDisposable();
+            IDisposableObject<T> pooled = pool.Get();
             T projectile = pooled.Object;
             projectile.pooled = pooled;
             projectile.Launch(from, angleDeg, properties);

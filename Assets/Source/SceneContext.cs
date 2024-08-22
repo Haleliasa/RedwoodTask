@@ -29,7 +29,7 @@ public class SceneContext : MonoBehaviour {
     private void Awake() {
         IServiceCollection collection = new ServiceCollection()
             .AddSingleton(this.camera)
-            .AddSingleton<IObjectPool<Zombie>>(this.zombiePool)
+            .AddSingleton<IConcreteObjectPool<Zombie>>(this.zombiePool)
             .AddKeyedSingleton<IObjectPool<Collectable>>(
                 InjectKeys.ZombieResourcePool,
                 this.zombieResourcePool)

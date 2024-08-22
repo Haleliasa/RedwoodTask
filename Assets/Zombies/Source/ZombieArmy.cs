@@ -35,7 +35,7 @@ namespace Zombies {
         [SerializeField]
         private float maxSpawnInterval = 10f;
 
-        private IObjectPool<Zombie> zombiePool = null!;
+        private IConcreteObjectPool<Zombie> zombiePool = null!;
         private IObjectPool<AudioSourceGroup> zombieDeathSoundPool = null!;
         private Injector injector = null!;
         private bool started = false;
@@ -44,7 +44,7 @@ namespace Zombies {
 
         [Inject]
         public void Inject(
-            IObjectPool<Zombie> zombiePool,
+            IConcreteObjectPool<Zombie> zombiePool,
             // key in case of multiple pools of type AudioSourceGroup
             [ZombieDeathSoundPool] IObjectPool<AudioSourceGroup> zombieDeathSoundPool,
             Injector injector) {
@@ -117,7 +117,7 @@ namespace Zombies {
                 }
                 ZombieType type = this.types[Random.Range(0, this.types.Length)];
                 Vector2 pos = this.positions[Random.Range(0, this.positions.Length)].position;
-                Zombie zombie = this.zombiePool.Get();
+                Zombie zombie = this.zombiePool.GetConcrete();
                 this.injector.Inject(zombie.gameObject);
                 zombie.Init(type, pos, this.target);
                 zombie.Died += OnZombieDied;
@@ -139,9 +139,9 @@ namespace Zombies {
         }
 
         private IEnumerator PlayDeathSound() {
-            AudioSourceGroup deathSound = this.zombieDeathSoundPool.Get();
-            yield return deathSound.PlayOneRandomlyRoutine();
-            this.zombieDeathSoundPool.Return(deathSound);
+            using IDisposableObject<AudioSourceGroup> deathSound =
+                this.zombieDeathSoundPool.Get();
+            yield return deathSound.Object.PlayOneRandomlyRoutine();
         }
     }
 }

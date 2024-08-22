@@ -46,7 +46,7 @@ namespace Collectables {
             Vector2 position,
             int? value = null)
             where T : Collectable {
-            IDisposableObject<T> pooled = pool.GetDisposable();
+            IDisposableObject<T> pooled = pool.Get();
             T collectable = pooled.Object;
             collectable.pooled = pooled;
             collectable.Place(position, value);

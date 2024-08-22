@@ -1,10 +1,5 @@
-using UnityEngine;
+﻿using UnityEngine;
 
-public interface IObjectPool<T> where T : Object
-{
-    T Get();
-
-    IDisposableObject<T> GetDisposable();
-
-    void Return(T obj);
+public interface IObjectPool<out T> where T : Object {
+    IDisposableObject<T> Get();
 }
